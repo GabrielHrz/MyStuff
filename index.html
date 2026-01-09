@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyStuff - Gestão de Inventário</title>
+    <style>
+        /* CSS utilizando Flexbox */
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --light: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Sección de Búsqueda */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .search-container input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Formulario */
+        .form-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .form-group-row > * {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn-add { background-color: var(--success); color: white; }
+        .btn-cancel { background-color: #95a5a6; color: white; }
+        .btn-olx { background-color: #232323; color: white; margin-top: 5px; font-size: 12px;}
+
+        /* Lista de Artículos */
+        .inventory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .item-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex-grow: 1;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        .badge-venda { background: #ffeaa7; color: #d6a31e; }
+        .badge-doacao { background: #55efc4; color: #00b894; }
+        .badge-essencial { background: #fab1a0; color: #e17055; }
+
+        @media (max-width: 600px) {
+            .item-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .item-actions { width: 100%; justify-content: flex-end; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>MyStuff - Inventário Pessoal</h1>
+</header>
+
+<div class="container">
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Pesquisar por nome ou categoria..." onkeyup="renderItems()">
+    </div>
+
+    <div class="form-card">
+        <h3 id="formTitle">Novo Artigo</h3>
+        <input type="hidden" id="editIndex" value="-1">
+        <div class="form-group-row">
+            <input type="text" id="itemName" placeholder="Nome do Artigo *" required>
+            <input type="text" id="itemCategory" placeholder="Categoria">
+        </div>
+        <div class="form-group-row">
+            <input type="number" id="itemValue" placeholder="Valor (€)">
+            <input type="text" id="itemLocation" placeholder="Localização (Ex: Sala, Garagem) *" required>
+        </div>
+        <div class="form-group-row">
+            <select id="itemStatus">
+                <option value="Essencial">Essencial</option>
+                <option value="Doação">Doação</option>
+                <option value="Venda">Para Venda</option>
+            </select>
+            <textarea id="itemDesc" placeholder="Descrição do artigo..."></textarea>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-add" onclick="saveItem()" id="btnSave">Registar Artigo</button>
+            <button class="btn-cancel" onclick="resetForm()" id="btnCancel" style="display:none;">Cancelar Edição</button>
+        </div>
+    </div>
+
+    <div id="inventoryList" class="inventory-list">
+        </div>
+</div>
+
+
+</body>
+<script src="js/app.js"></script>
+</html>
